@@ -4,13 +4,15 @@
 
  O **SmartList** é uma aplicação web focada em simplicidade, velocidade e usabilidade tátil (otimizada tanto para dispositivos móveis quanto para computadores). O objetivo do produto é unificar e organizar o fluxo de compras do dia a dia em três grandes pilares: **Mercado & Despensa**, **Feira & Hortifrúti** e **Farmácia & Cuidados Pessoais**.
 
+![Screenshot da Página Inicial](screenshot-app.png)
+
 ---
 
 ## 📸 Demonstração da Aplicação
 
 | Tela Principal & Lista | Histórico & Métricas |
 | :---: | :---: |
-| ![Lista Ativa](assets/screenshot-lista.png) | ![Histórico de Compras](assets/screenshot-historico.png) |
+| ![Lista Ativa](screenshot-lista.png) | ![Histórico de Compras](screenshot-historico.png) |
 
 ---
 
