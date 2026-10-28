@@ -10,7 +10,7 @@
 
 | Tela Principal & Lista | Histórico & Métricas |
 | :---: | :---: |
-| ![Lista Ativa](assets/screenshot-lista.png) | ![Histórico de Compras](assets/screenshot-historico.png) |
+| ![Lista Ativa](screenshot-lista.png) | ![Histórico de Compras](screenshot-historico.png) |
 
 ---
 
