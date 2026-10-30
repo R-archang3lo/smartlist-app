@@ -4,6 +4,12 @@
 
 O **SmartList** é uma aplicação web focada em simplicidade, velocidade e usabilidade tátil (otimizada tanto para dispositivos móveis quanto para computadores). O objetivo do produto é unificar e organizar o fluxo de compras do dia a dia em três grandes pilares: **Mercado & Despensa**, **Feira & Hortifrúti** e **Farmácia & Cuidados Pessoais**.
 
+## 🌐 Acesse a aplicação
+
+O SmartList está disponível online, hospedado na **Vercel**, com interface responsiva e otimizada para utilização tanto em computadores quanto em dispositivos móveis.
+
+🚀 **[Acessar SmartList](https://smartlist-lista-de-compras-aaukznpur-me-d259.vercel.app/)**
+
 ![Screenshot da Página Inicial](smartlist-app.png)
 
 ---
