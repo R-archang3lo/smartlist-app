@@ -36,8 +36,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({
         lines.push(`${icon} *${CATEGORIES[cat].shortName.toUpperCase()}* (${catItems.length})`);
         catItems.forEach((item) => {
           const brandText = item.brand ? ` (${item.brand})` : '';
+          const star = item.isFavorite ? ' ⭐' : '';
           const check = item.status === 'completed' ? ' [✓]' : ' [ ]';
-          lines.push(`• ${item.name}${brandText}: ${item.quantity} ${item.unit}${onlyPending ? '' : check}`);
+          lines.push(`• ${item.name}${brandText}${star}: ${item.quantity} ${item.unit}${onlyPending ? '' : check}`);
         });
         lines.push('');
       }

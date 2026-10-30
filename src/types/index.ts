@@ -11,6 +11,7 @@ export interface ShoppingItem {
   createdAt: number;
   completedAt?: number;
   notes?: string;
+  isFavorite?: boolean;
 }
 
 export interface HistoryItem {
@@ -28,7 +29,7 @@ export type ActiveTab = 'list' | 'history';
 
 export type CategoryFilter = 'all' | CategoryType;
 
-export type SortOption = 'status' | 'category' | 'name' | 'newest';
+export type SortOption = 'status' | 'category' | 'name' | 'newest' | 'favorites';
 
 export interface CategoryMeta {
   id: CategoryType;

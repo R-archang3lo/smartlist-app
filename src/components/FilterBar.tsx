@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, X, ArrowUpDown, CheckCheck, Trash2 } from 'lucide-react';
+import { Search, X, ArrowUpDown, CheckCheck, Trash2, Star } from 'lucide-react';
 import { CategoryFilter, SortOption } from '../types';
 import { CATEGORIES } from '../constants/categories';
 
@@ -10,6 +10,9 @@ interface FilterBarProps {
   onSearchChange: (query: string) => void;
   sortBy: SortOption;
   onSortChange: (sort: SortOption) => void;
+  onlyFavorites: boolean;
+  onToggleOnlyFavorites: () => void;
+  favoriteCount: number;
   hasCompletedItems: boolean;
   onClearCompleted: () => void;
   onToggleAllCompleted: () => void;
@@ -29,6 +32,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   onSearchChange,
   sortBy,
   onSortChange,
+  onlyFavorites,
+  onToggleOnlyFavorites,
+  favoriteCount,
   hasCompletedItems,
   onClearCompleted,
   onToggleAllCompleted,
@@ -125,6 +131,37 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           )}
         </div>
 
+        {/* Quick Favorites Filter Toggle Button */}
+        <button
+          type="button"
+          onClick={onToggleOnlyFavorites}
+          aria-pressed={onlyFavorites}
+          title={onlyFavorites ? 'Mostrar todos os itens' : 'Filtrar apenas favoritos (⭐)'}
+          className={`min-h-[42px] px-3.5 py-2 text-xs font-semibold rounded-xl border transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
+            onlyFavorites
+              ? 'bg-amber-500 text-white border-amber-500 shadow-xs'
+              : 'bg-white hover:bg-amber-50/70 text-slate-700 hover:text-amber-700 border-slate-200'
+          }`}
+        >
+          <Star
+            className={`w-3.5 h-3.5 ${
+              onlyFavorites ? 'fill-white text-white' : 'text-amber-500 fill-amber-500'
+            }`}
+          />
+          <span className="hidden xs:inline">Favoritos</span>
+          {favoriteCount > 0 && (
+            <span
+              className={`text-[11px] px-1.5 py-0.2 rounded-md font-bold tabular-nums ${
+                onlyFavorites
+                  ? 'bg-amber-600 text-white'
+                  : 'bg-amber-100 text-amber-800'
+              }`}
+            >
+              {favoriteCount}
+            </span>
+          )}
+        </button>
+
         {/* Sort Selector */}
         <div className="flex items-center gap-2 shrink-0">
           <div className="flex items-center gap-1.5 px-3 min-h-[42px] bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-700">
@@ -136,6 +173,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               className="bg-transparent border-0 font-medium text-slate-800 text-xs focus:outline-hidden cursor-pointer"
             >
               <option value="status">Pendentes primeiro</option>
+              <option value="favorites">⭐ Favoritos primeiro</option>
               <option value="category">Por Categoria</option>
               <option value="name">Nome (A - Z)</option>
               <option value="newest">Mais recentes</option>

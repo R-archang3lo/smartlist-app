@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, Edit2, Trash2, Plus, Minus, ShoppingBag, Apple, Pill } from 'lucide-react';
+import { Check, Edit2, Trash2, Plus, Minus, ShoppingBag, Apple, Pill, Star } from 'lucide-react';
 import { ShoppingItem } from '../types';
 import { CATEGORIES } from '../constants/categories';
 
@@ -9,6 +9,7 @@ interface ItemCardProps {
   onUpdateQuantity: (id: string, delta: number) => void;
   onEdit: (item: ShoppingItem) => void;
   onDelete: (id: string) => void;
+  onToggleFavorite: (id: string) => void;
 }
 
 export const ItemCard: React.FC<ItemCardProps> = ({
@@ -17,6 +18,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   onUpdateQuantity,
   onEdit,
   onDelete,
+  onToggleFavorite,
 }) => {
   const isCompleted = item.status === 'completed';
   const categoryMeta = CATEGORIES[item.category];
@@ -33,6 +35,8 @@ export const ItemCard: React.FC<ItemCardProps> = ({
       className={`group relative bg-white rounded-2xl border transition-all duration-150 p-3.5 sm:p-4 flex items-center justify-between gap-3 ${
         isCompleted
           ? 'bg-slate-50/70 border-slate-200/60 opacity-80'
+          : item.isFavorite
+          ? 'border-amber-300 bg-amber-50/20 shadow-xs hover:border-amber-400 hover:shadow-sm'
           : 'border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-sm'
       }`}
     >
@@ -58,7 +62,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
 
         {/* Content Info */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
             <h3
               className={`text-base font-semibold truncate transition-colors ${
                 isCompleted
@@ -68,10 +72,45 @@ export const ItemCard: React.FC<ItemCardProps> = ({
             >
               {item.name}
             </h3>
+
+            {/* Quick Favorite Star Button */}
+            <button
+              type="button"
+              onClick={() => onToggleFavorite(item.id)}
+              aria-label={
+                item.isFavorite
+                  ? `Remover ${item.name} dos favoritos`
+                  : `Adicionar ${item.name} aos favoritos`
+              }
+              title={
+                item.isFavorite
+                  ? 'Remover dos favoritos'
+                  : 'Adicionar aos favoritos'
+              }
+              className="min-h-[32px] min-w-[32px] -my-1 p-1 rounded-lg flex items-center justify-center hover:bg-amber-100/60 transition-colors cursor-pointer shrink-0"
+            >
+              <Star
+                className={`w-4 h-4 transition-transform active:scale-125 ${
+                  item.isFavorite
+                    ? 'text-amber-500 fill-amber-400 filter drop-shadow-xs'
+                    : 'text-slate-300 hover:text-amber-400'
+                }`}
+              />
+            </button>
           </div>
 
           {/* Unboxed Metadata (Zero-pill discipline) */}
           <div className="flex items-center flex-wrap gap-x-2 gap-y-1 text-xs text-slate-500 mt-0.5">
+            {/* Favorite tag indicator */}
+            {item.isFavorite && (
+              <>
+                <span className="inline-flex items-center gap-0.5 text-amber-600 font-semibold">
+                  Favorito
+                </span>
+                <span aria-hidden="true" className="text-slate-300">·</span>
+              </>
+            )}
+
             {/* Category tag */}
             <span className={`inline-flex items-center gap-1 font-medium ${
               isCompleted ? 'text-slate-400' : categoryMeta.textColor

@@ -23,6 +23,7 @@ export default function App() {
   const [history, setHistory] = useState<HistoryItem[]>(() => getStoredHistory());
   const [activeTab, setActiveTab] = useState<ActiveTab>('list');
   const [currentFilter, setCurrentFilter] = useState<CategoryFilter>('all');
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('status');
 
@@ -68,6 +69,10 @@ export default function App() {
     return items.filter((i) => i.status === 'completed').length;
   }, [items]);
 
+  const favoriteCount = useMemo(() => {
+    return items.filter((i) => i.isFavorite).length;
+  }, [items]);
+
   // Total counts by category for current filter badge
   const categoryItemCounts = useMemo(() => {
     return {
@@ -83,14 +88,27 @@ export default function App() {
     return items
       .filter((item) => {
         const matchesCategory = currentFilter === 'all' || item.category === currentFilter;
+        const matchesFavorites = !onlyFavorites || !!item.isFavorite;
         const matchesSearch =
           !searchQuery.trim() ||
           item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           (item.brand && item.brand.toLowerCase().includes(searchQuery.toLowerCase()));
-        return matchesCategory && matchesSearch;
+        return matchesCategory && matchesFavorites && matchesSearch;
       })
       .sort((a, b) => {
         if (sortBy === 'status') {
+          if (a.status !== b.status) {
+            return a.status === 'pending' ? -1 : 1;
+          }
+          if (!!a.isFavorite !== !!b.isFavorite) {
+            return a.isFavorite ? -1 : 1;
+          }
+          return b.createdAt - a.createdAt;
+        }
+        if (sortBy === 'favorites') {
+          if (!!a.isFavorite !== !!b.isFavorite) {
+            return a.isFavorite ? -1 : 1;
+          }
           if (a.status !== b.status) {
             return a.status === 'pending' ? -1 : 1;
           }
@@ -113,7 +131,7 @@ export default function App() {
         }
         return 0;
       });
-  }, [items, currentFilter, searchQuery, sortBy]);
+  }, [items, currentFilter, onlyFavorites, searchQuery, sortBy]);
 
   // Handler: Add or Update Item
   const handleSaveItem = (
@@ -177,6 +195,15 @@ export default function App() {
 
         return updatedItem;
       })
+    );
+  };
+
+  // Handler: Toggle Favorite (⭐)
+  const handleToggleFavorite = (id: string) => {
+    setItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, isFavorite: !item.isFavorite } : item
+      )
     );
   };
 
@@ -300,6 +327,7 @@ export default function App() {
       setItems(defs.items);
       setHistory(defs.history);
       setCurrentFilter('all');
+      setOnlyFavorites(false);
       setSearchQuery('');
     }
   };
@@ -359,6 +387,9 @@ export default function App() {
               onSearchChange={setSearchQuery}
               sortBy={sortBy}
               onSortChange={setSortBy}
+              onlyFavorites={onlyFavorites}
+              onToggleOnlyFavorites={() => setOnlyFavorites((prev) => !prev)}
+              favoriteCount={favoriteCount}
               hasCompletedItems={totalCompleted > 0}
               onClearCompleted={handleClearCompleted}
               onToggleAllCompleted={handleToggleAllCompleted}
@@ -371,8 +402,10 @@ export default function App() {
               items={displayedItems}
               currentFilter={currentFilter}
               searchQuery={searchQuery}
+              onlyFavorites={onlyFavorites}
               onToggleStatus={handleToggleStatus}
               onUpdateQuantity={handleUpdateQuantity}
+              onToggleFavorite={handleToggleFavorite}
               onEdit={(item) => {
                 setEditingItem(item);
                 setIsModalOpen(true);

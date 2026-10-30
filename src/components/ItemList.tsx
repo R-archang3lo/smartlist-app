@@ -7,10 +7,12 @@ interface ItemListProps {
   items: ShoppingItem[];
   currentFilter: CategoryFilter;
   searchQuery: string;
+  onlyFavorites?: boolean;
   onToggleStatus: (id: string) => void;
   onUpdateQuantity: (id: string, delta: number) => void;
   onEdit: (item: ShoppingItem) => void;
   onDelete: (id: string) => void;
+  onToggleFavorite: (id: string) => void;
   onOpenNewModal: () => void;
 }
 
@@ -18,10 +20,12 @@ export const ItemList: React.FC<ItemListProps> = ({
   items,
   currentFilter,
   searchQuery,
+  onlyFavorites = false,
   onToggleStatus,
   onUpdateQuantity,
   onEdit,
   onDelete,
+  onToggleFavorite,
   onOpenNewModal,
 }) => {
   const [completedCollapsed, setCompletedCollapsed] = useState(false);
@@ -37,14 +41,18 @@ export const ItemList: React.FC<ItemListProps> = ({
         </div>
         <div className="max-w-sm mx-auto">
           <h3 className="text-base font-bold text-slate-900">
-            {searchQuery
+            {onlyFavorites
+              ? 'Nenhum item marcado como favorito'
+              : searchQuery
               ? 'Nenhum item encontrado com essa busca'
               : currentFilter !== 'all'
               ? 'Nenhum item nesta categoria'
               : 'Sua lista está vazia!'}
           </h3>
           <p className="text-xs text-slate-500 mt-1">
-            {searchQuery
+            {onlyFavorites
+              ? 'Toque na estrela (⭐) de qualquer item para fixá-lo nos seus favoritos e ter acesso rápido.'
+              : searchQuery
               ? 'Tente procurar por outro termo ou limpe a busca.'
               : 'Adicione novos itens usando o campo acima ou reabra itens frequentes do histórico.'}
           </p>
@@ -81,6 +89,7 @@ export const ItemList: React.FC<ItemListProps> = ({
                 onUpdateQuantity={onUpdateQuantity}
                 onEdit={onEdit}
                 onDelete={onDelete}
+                onToggleFavorite={onToggleFavorite}
               />
             ))}
           </div>
@@ -133,6 +142,7 @@ export const ItemList: React.FC<ItemListProps> = ({
                   onUpdateQuantity={onUpdateQuantity}
                   onEdit={onEdit}
                   onDelete={onDelete}
+                  onToggleFavorite={onToggleFavorite}
                 />
               ))}
             </div>

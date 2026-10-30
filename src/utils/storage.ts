@@ -14,6 +14,7 @@ const INITIAL_ITEMS: ShoppingItem[] = [
     status: 'pending',
     createdAt: Date.now() - 3600000 * 2,
     notes: 'Preferência por desnatado se não tiver',
+    isFavorite: true,
   },
   {
     id: 'item-2',
@@ -24,6 +25,7 @@ const INITIAL_ITEMS: ShoppingItem[] = [
     unit: 'g',
     status: 'pending',
     createdAt: Date.now() - 3600000 * 4,
+    isFavorite: true,
   },
   {
     id: 'item-3',

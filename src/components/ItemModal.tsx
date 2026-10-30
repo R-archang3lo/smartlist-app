@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Minus, ShoppingBag, Apple, Pill, Sparkles } from 'lucide-react';
+import { X, Plus, Minus, ShoppingBag, Apple, Pill, Sparkles, Star } from 'lucide-react';
 import { ShoppingItem, CategoryType } from '../types';
 import { CATEGORIES, COMMON_UNITS, POPULAR_SUGGESTIONS } from '../constants/categories';
 
@@ -26,6 +26,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
   const [quantity, setQuantity] = useState(1);
   const [unit, setUnit] = useState('un');
   const [status, setStatus] = useState<'pending' | 'completed'>('pending');
+  const [isFavorite, setIsFavorite] = useState(false);
   const [notes, setNotes] = useState('');
   const [error, setError] = useState('');
 
@@ -38,6 +39,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
       setQuantity(editingItem.quantity);
       setUnit(editingItem.unit || 'un');
       setStatus(editingItem.status);
+      setIsFavorite(editingItem.isFavorite ?? false);
       setNotes(editingItem.notes || '');
       setError('');
     } else {
@@ -47,6 +49,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
       setQuantity(1);
       setUnit('un');
       setStatus('pending');
+      setIsFavorite(false);
       setNotes('');
       setError('');
     }
@@ -78,6 +81,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
         quantity: Math.max(1, quantity),
         unit: unit.trim() || 'un',
         status,
+        isFavorite,
         notes: notes.trim() || undefined,
       },
       editingItem?.id
@@ -337,6 +341,34 @@ export const ItemModal: React.FC<ItemModalProps> = ({
                 Já comprado
               </button>
             </div>
+          </div>
+
+          {/* Destaque / Favorito (⭐) */}
+          <div className="flex items-center justify-between p-3 rounded-2xl border border-slate-200/90 bg-slate-50/60">
+            <div className="flex items-center gap-2.5">
+              <div
+                className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors ${
+                  isFavorite ? 'bg-amber-100 text-amber-600' : 'bg-slate-200/70 text-slate-400'
+                }`}
+              >
+                <Star className={`w-4 h-4 ${isFavorite ? 'fill-amber-500 text-amber-500' : ''}`} />
+              </div>
+              <div>
+                <span className="text-xs font-bold text-slate-800 block">Item Favorito</span>
+                <span className="text-[11px] text-slate-500 block">Destaque com estrela para acesso rápido</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsFavorite(!isFavorite)}
+              className={`min-h-[36px] px-3.5 py-1.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
+                isFavorite
+                  ? 'bg-amber-500 text-white border-amber-500 shadow-xs'
+                  : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              {isFavorite ? 'Favoritado ⭐' : 'Marcar'}
+            </button>
           </div>
 
           {/* Observações / Notas */}
