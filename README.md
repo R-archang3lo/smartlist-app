@@ -55,7 +55,7 @@ Essa evolução amplia a experiência de uso ao permitir que produtos favoritos 
 
 **Demonstração da funcionalidade:**
 
-![Funcionalidade de Favoritos](assets/screenshot-favoritos.png)
+![Funcionalidade de Favoritos](screenshot-favoritos.png)
 
 ---
 
